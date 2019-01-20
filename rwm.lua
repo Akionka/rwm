@@ -164,7 +164,6 @@ function main()
 		if arg1 == "join" then 
 			sampSendChat("/rwave "..arg1.." "..arg2.." "..arg3)
 			ini.settings.last = arg2.." "..arg3
-			print(ini.settings.last)
 			inicfg.save(ini, "\\rwm\\settings")
 		else
 			sampSendChat("/rwave "..params)
@@ -288,7 +287,6 @@ function updatemenu()
 							local result, button, list, input = sampHasDialogRespond(31412)
 							if result then
 								if button == 1 and #trim(input) ~= 0 then
-									print(trim(input):find("%s"))
 									if trim(input):find("%s") == nil then
 										ini2[key]["pass"] = trim(input)
 										inicfg.save(ini2, "\\rwm\\channels")
