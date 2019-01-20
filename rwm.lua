@@ -145,7 +145,11 @@ local my_dialog = {
     },
 }
 
-function sampev.onServerMessage(color, text) if color == -1347440641 and text == u8:decode("{ffffff}С возвращением, вы успешно вошли в свой аккаунт") and ini.settings.connecttolast and ini.settings.last ~= nil then sampSendChat("/rwave join "..ini.settings.last) end end
+function sampev.onServerMessage(color, text)
+	if color == -1347440641 and text == u8:decode("{ffffff}С возвращением, вы успешно вошли в свой аккаунт.") and ini.settings.connecttolast and ini.settings.last ~= nil then
+	sampSendChat(u8:decode("/rwave join "..ini.settings.last))
+	end
+end
 
 function main()
 	if not isSampfuncsLoaded() or not isSampLoaded() then return end
@@ -197,7 +201,7 @@ function updatemenu()
 	my_dialog[1].title = ini.settings.connecttolast and u8:decode("[RWM]: Режим автоматического подключения к последнему каналу — {00FF00}включен{FFFFFF}") or u8:decode("[RWM]: Режим автоматического подключения к последнему каналу — {FF0000}выключен{FFFFFF}")
 	my_dialog[2].title = u8:decode("[RWM]: Подключиться к последнему каналу")
 	my_dialog[3].title = u8:decode("[RWM]: Менеджер каналов")
-	my_dialog[3].submenu = {}
+	my_dialog[3].submenu = {title = u8:decode("{2980b9}Radio Wave Manager | Менеджер каналов")}
 	table.insert(my_dialog[3].submenu, {
 		title = u8:decode("[RWM]: Добавить новый канал"),
 		onclick = function()
