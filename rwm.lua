@@ -1,7 +1,7 @@
 script_name('RW Manager')
 script_author('akionka')
-script_version('1.0')
-script_version_number(1)
+script_version('1.1')
+script_version_number(2)
 script_description([[{FFFFFF}Данный скрипт разработан Akionka с использованием кода от FYP'а, а также с использованием идей коммьюнити Trinity GTA.
 В данный момент скрипт умеет:
  - В автоматическом режиме подключаться к последнему каналу
