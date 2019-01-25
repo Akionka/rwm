@@ -6,11 +6,13 @@ script_description([[{FFFFFF}Данный скрипт разработан Akio
 В данный момент скрипт умеет:
  - В автоматическом режиме подключаться к последнему каналу
  - Управлять каналами. Более подробно Вы сможете ознакомиться с этим функционалом в {2980b0}/rwm{FFFFFF}.
- 
+
 Вероятно, скрипт имеет баги, поэтому прошу о всех найденных багах писать мне в личку (ссылки в {2980b0}/rwm{FFFFFF}).]])
 local update_log = [[{2980b9}v1.0 [20.01.2019]{FFFFFF}
 I. Скрипт автоматически подключается к каналу после релога.
-II. Также, появилось крутое меню {2980b0}/rwm{FFFFFF}]]
+II. Также, появилось крутое меню {2980b0}/rwm{FFFFFF}
+{2980b9}v1.1 [26.01.2019]{FFFFFF}
+I. Minor fixes]]
 local sf = require 'sampfuncs'
 local sampev = require 'lib.samp.events'
 local encoding = require 'encoding'
@@ -36,19 +38,19 @@ local my_dialog = {
     {
 		title = ini.settings.connecttolast and u8:decode("[RWM]: Режим автоматического подключения к последнему каналу — {00FF00}включен{FFFFFF}") or u8:decode("[RWM]: Режим автоматического подключения к последнему каналу — {FF0000}выключен{FFFFFF}"),
         onclick = function(menu, row)
-			ini.settings.connecttolast = not ini.settings.connecttolast
-			inicfg.save(ini, "\\rwm\\settings")
-			updatemenu()
-			return true
+					ini.settings.connecttolast = not ini.settings.connecttolast
+					inicfg.save(ini, "\\rwm\\settings")
+					updatemenu()
+					return true
         end
     },
     {
 		title = u8:decode("[RWM]: Подключиться к последнему каналу"),
         onclick = function(menu, row)
-			if ini.settings.last ~= nil then sampSendChat("/rwave leave") sampSendChat("/rwave join "..ini.settings.last)
-			else sampAddChatMessage(u8:decode("[RWM]: {FF0000}Error! {FFFFFF}Отсутствуют данные о послнедем подключенном канале"), -1) end
-			updatemenu()
-			return true
+					if ini.settings.last ~= nil then sampSendChat("/rwave leave") sampSendChat("/rwave join "..ini.settings.last)
+					else sampAddChatMessage(u8:decode("[RWM]: {FF0000}Error! {FFFFFF}Отсутствуют данные о послнедем подключенном канале"), -1) end
+					updatemenu()
+					return true
         end
     },
     {
@@ -69,21 +71,21 @@ local my_dialog = {
     {
         title = u8:decode(" "),
         onclick = function(menu, row)
-			return true
+					return true
         end
     },
     {
         title = u8:decode("О скрипте"),
         onclick = function(menu, row)
-			sampShowDialog(31411, u8:decode("{2980b9}Radio Wave Manager | О скрипте"), u8:decode(thisScript().description), u8:decode("Окей"), "", DIALOG_STYLE_MSGBOX)
-			return false
+					sampShowDialog(31411, u8:decode("{2980b9}Radio Wave Manager | О скрипте"), u8:decode(thisScript().description), u8:decode("Окей"), "", DIALOG_STYLE_MSGBOX)
+					return false
         end
     },
     {
         title = u8:decode("Update log"),
         onclick = function(menu, row)
-			sampShowDialog(31410, u8:decode("{2980b9}Radio Wave Manager | Update Log"), u8:decode(update_log), u8:decode("Окей"), "", DIALOG_STYLE_MSGBOX)
-			return false
+					sampShowDialog(31410, u8:decode("{2980b9}Radio Wave Manager | Update Log"), u8:decode(update_log), u8:decode("Окей"), "", DIALOG_STYLE_MSGBOX)
+					return false
         end
     },
     {
@@ -116,7 +118,7 @@ local my_dialog = {
 			{
 				title = u8:decode("Проверить обновления. Текущая версия: {2980b9}"..thisScript().version.."{FFFFFF}"),
 				onclick = function(menu, row)
-					update(false)
+					update()
 					while updateinprogess ~= false do wait(100) end
 					return false
 				end,
@@ -126,46 +128,46 @@ local my_dialog = {
     {
         title = u8:decode(" "),
         onclick = function(menu, row)
-			return true
+						return true
         end
     },
     {
         title = u8:decode("Bug Report [VK]"),
         onclick = function(menu, row)
-			os.execute('explorer "https://vk.com/id358870950"')
-			return true
+					os.execute('explorer "https://vk.com/id358870950"')
+					return true
         end
     },
     {
         title = u8:decode("Bug Report [Telegram]"),
         onclick = function(menu, row)
-			os.execute('explorer "https://teleg.run/akionka"')
-			return true
+					os.execute('explorer "https://teleg.run/akionka"')
+					return true
         end
     },
 }
 
 function sampev.onServerMessage(color, text)
 	if color == -1347440641 and text == u8:decode("{ffffff}С возвращением, вы успешно вошли в свой аккаунт.") and ini.settings.connecttolast and ini.settings.last ~= nil then
-	sampSendChat(u8:decode("/rwave join "..ini.settings.last))
+		sampSendChat(u8:decode("/rwave join "..ini.settings.last))
 	end
 end
 
 function main()
 	if not isSampfuncsLoaded() or not isSampLoaded() then return end
-    while not isSampAvailable() do wait(0) end
-	
+  while not isSampAvailable() do wait(0) end
+
 	updatemenu()
-	
+
 	sampRegisterChatCommand("rwm", function() lua_thread.create(function() updatemenu() submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager")) end) end)
-	sampRegisterChatCommand("rwave", function(params) 
+	sampRegisterChatCommand("rwave", function(params)
 		params = trim(params)
 		local arg1, arg2, arg3 = params:match(u8:decode("^(%w+)%s+(%w+)%s+(%w+)"))
 		if arg1 == nil and arg2 == nil and arg3 == nil then
 			local arg1, arg2  = params:match(u8:decode("^(%w+)%s+(%w+)"))
 			local arg3 = ""
 		end
-		if arg1 == "join" then 
+		if arg1 == "join" then
 			sampSendChat("/rwave "..arg1.." "..arg2.." "..arg3)
 			ini.settings.last = arg2.." "..arg3
 			inicfg.save(ini, "\\rwm\\settings")
@@ -173,24 +175,24 @@ function main()
 			sampSendChat("/rwave "..params)
 		end
 	end)
-	
+
 	if ini.settings.showstarms then
-		sampAddChatMessage(u8:decode("[RWM]: Скрипт {00FF00}успешно{FFFFFF} загружен. Версия: {2980b9}"..thisScript().version.."{FFFFFF}"), -1)
-		sampAddChatMessage(u8:decode("[RWM]: Автор - {2980b9}Akionka{FFFFFF}. Выключить данное сообщение можно в {2980b9}/rwm{FFFFFF}"), -1)
+		sampAddChatMessage(u8:decode("[RWM]: Скрипт {00FF00}успешно{FFFFFF} загружен. Версия: {2980b9}"..thisScript().version.."{FFFFFF}."), -1)
+		sampAddChatMessage(u8:decode("[RWM]: Автор - {2980b9}Akionka{FFFFFF}. Выключить данное сообщение можно в {2980b9}/rwm{FFFFFF}."), -1)
 	end
-	
-	update(true)
+
+	update()
 	while updateinprogess ~= false do wait(0) end
-	
+
 	while true do
 		wait(0)
 		local result, button, list, input = sampHasDialogRespond(31410)
-		if result then 
+		if result then
 			updatemenu()
 			submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager"))
 		end
 		local result, button, list, input = sampHasDialogRespond(31411)
-		if result then 
+		if result then
 			updatemenu()
 			submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager"))
 		end
@@ -205,7 +207,7 @@ function updatemenu()
 	table.insert(my_dialog[3].submenu, {
 		title = u8:decode("[RWM]: Добавить новый канал"),
 		onclick = function()
-					sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Добавление нового канала"), u8:decode("{FFFFFF}Если вы хотите добавить новый канал в свой список, то введите ниже его ID и пароль через пробел.\n\nПример: {2980b9}123 QWERTY{FFFFFF}.\n\nЕсли у канала нет пароля, то ничего введите просто ID канала"), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
+					sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Добавление нового канала"), u8:decode("{FFFFFF}Если вы хотите добавить новый канал в свой список, то введите ниже его ID и пароль через пробел.\n\nПример: {2980b9}123 QWERTY{FFFFFF}.\n\nЕсли у канала нет пароля, то ничего введите просто ID канала."), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
 					local dialog_create = false
 					while not dialog_create do
 						wait(0)
@@ -225,8 +227,8 @@ function updatemenu()
 									dialog_create = true
 									updatemenu()
 									submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager"))
-								else 
-									sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Добавление нового канала"), u8:decode("{FFFFFF}Если вы хотите добавить новый канал в свой список, то введите ниже его ID и пароль через пробел.\n\nПример: {2980b9}123 QWERTY{FFFFFF}.\n\nЕсли у канала нет пароля, то ничего введите просто ID канала"), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
+								else
+									sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Добавление нового канала"), u8:decode("{FFFFFF}Если вы хотите добавить новый канал в свой список, то введите ниже его ID и пароль через пробел.\n\nПример: {2980b9}123 QWERTY{FFFFFF}.\n\nЕсли у канала нет пароля, то ничего введите просто ID канала."), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
 								end
 							else
 								submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager"))
@@ -258,7 +260,7 @@ function updatemenu()
 				{
 					title = u8:decode("{FFFFFF}Переименовать"),
 					onclick = function(menu, row)
-						sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Переименование"), u8:decode("{FFFFFF}Если вы хотите переименовать канал {2980b9}"..val["name"].."{FFFFFF}, то введите ниже его новое название.\n\nПример: {2980b9}Мой крутой канал!{FFFFFF}"), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
+						sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Переименование"), u8:decode("{FFFFFF}Если вы хотите переименовать канал {2980b9}"..val["name"].."{FFFFFF}, то введите ниже его новое название.\n\nПример: {2980b9}Мой крутой канал!{FFFFFF}."), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
 						local dialog_rename = false
 						while not dialog_rename do
 							wait(0)
@@ -284,7 +286,7 @@ function updatemenu()
 				{
 					title = u8:decode("{FFFFFF}Сменить пароль"),
 					onclick = function(menu, row)
-						sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Смена пароля"), u8:decode("{FFFFFF}Если вы хотите сменить пароль к каналу {2980b9}"..val["name"].."{FFFFFF}, то введите ниже его ниже.\n\nПример: {2980b9}mybrandnewpassword{FFFFFF}"), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
+						sampShowDialog(31412, u8:decode("{2980b9}Radio Wave Manager | Смена пароля"), u8:decode("{FFFFFF}Если вы хотите сменить пароль к каналу {2980b9}"..val["name"].."{FFFFFF}, то введите ниже его ниже.\n\nПример: {2980b9}mybrandnewpassword{FFFFFF}."), u8:decode("Готово"), u8:decode("Назад"), DIALOG_STYLE_INPUT)
 						local dialog_chngpass = false
 						while not dialog_chngpass do
 							wait(0)
@@ -294,12 +296,12 @@ function updatemenu()
 									if trim(input):find("%s") == nil then
 										ini2[key]["pass"] = trim(input)
 										inicfg.save(ini2, "\\rwm\\channels")
-										sampAddChatMessage(u8:decode("[RWM]: Вы успешно изменили пароль к каналу {2980b9}"..val["name"].."{FFFFFF} на {2980b9}"..trim(input).."{FFFFFF}"), -1)
+										sampAddChatMessage(u8:decode("[RWM]: Вы успешно изменили пароль к каналу {2980b9}"..val["name"].."{FFFFFF} на {2980b9}"..trim(input).."{FFFFFF}."), -1)
 										dialog_chngpass = true
 										updatemenu()
 										submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager"))
-									else 
-										sampAddChatMessage(u8:decode("[RWM]: {FF0000}Error! {FFFFFF}Пароль не может содержать пробелы"), -1)
+									else
+										sampAddChatMessage(u8:decode("[RWM]: {FF0000}Error! {FFFFFF}Пароль не может содержать пробелы."), -1)
 										dialog_chngpass = true
 										updatemenu()
 										submenus_show(my_dialog, u8:decode("{2980b9}Radio Wave Manager"))
@@ -348,7 +350,7 @@ end
 function trim(s)
     return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end
-function update(auto)
+function update()
 	local fpath = os.getenv('TEMP') .. '\\RWM-version.json'
 	downloadUrlToFile('https://raw.githubusercontent.com/Akionka/rwm/master/version.json', fpath, function(id, status, p1, p2)
 		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
@@ -359,18 +361,11 @@ function update(auto)
 					version = info.version
 					version_num = info.version_num
 					if version_num > thisScript().version_num then
-						sampAddChatMessage(u8:decode("[RWM]: Найдено объявление. Текущая версия: {2980b9}"..thisScript().version.."{FFFFFF}, новая версия: {2980b9}"..version.."{FFFFFF}"), -1)
-						if auto then sampAddChatMessage(ini.settings.autoupdate and u8:decode("[RWM]: Так как у вас {00FF00}включено{FFFFFF} автообновление, скрипт обновится прямо сейчас. Внимание! Игра или скрипт может вылететь") or u8:decode("[RWM]: Так как у вас {FF0000}выключено{FFFFFF} автообновление, скрипт не будет обновляться, однако вы можете сделать это в /igmenu"), -1) end
-						if ini.settings.autoupdate then 
-							lua_thread.create(goupdate) 
-						elseif not auto then
-							lua_thread.create(goupdate)
-						else 
-							updateinprogess = false
-						end
+						sampAddChatMessage(u8:decode("[RWM]: Найдено объявление. Текущая версия: {2980b9}"..thisScript().version.."{FFFFFF}, новая версия: {2980b9}"..version.."{FFFFFF}. Начинаю закачку."), -1)
+						lua_thread.create(goupdate)
+						updateinprogess = false
 					else
-						if ini.settings.showstarms and auto then sampAddChatMessage(u8:decode("[RWM]: У вас установлена самая свежая версия скрипта"), -1)
-						elseif not auto then sampAddChatMessage(u8:decode("[RWM]: У вас установлена самая свежая версия скрипта"), -1) end
+						sampAddChatMessage(u8:decode("[RWM]: У вас установлена самая свежая версия скрипта."), -1)
 						updateinprogess = false
 					end
 				end
@@ -382,10 +377,10 @@ function goupdate()
 	wait(300)
 	downloadUrlToFile("https://raw.githubusercontent.com/Akionka/rwm/master/rwm.lua", thisScript().path, function(id3, status1, p13, p23)
 		if status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-			sampAddChatMessage((u8:decode('[RWM]: Новая версия установлена! Чтобы скрипт обновился нужно либо перезайти в игру, либо ...')), -1)
-			sampAddChatMessage((u8:decode('[RWM]: ... если у вас есть автоперезагрузка скриптов, то новая версия уже готова и снизу вы увидите приветственное сообщение')), -1)
-			sampAddChatMessage((u8:decode('[RWM]: Если что-то пошло не так, то сообщите мне об этом в VK или Telegram > vk.com/akionka tele.run/akionka')), -1)
-		end	
+			sampAddChatMessage(u8:decode('[RWM]: Новая версия установлена! Чтобы скрипт обновился нужно либо перезайти в игру, либо ...'), -1)
+			sampAddChatMessage(u8:decode('[RWM]: ... если у вас есть автоперезагрузка скриптов, то новая версия уже готова и снизу вы увидите приветственное сообщение.'), -1)
+			sampAddChatMessage(u8:decode('[RWM]: Если что-то пошло не так, то сообщите мне об этом в VK или Telegram > {2980b0}vk.com/akionka tele.run/akionka{FFFFFF}.'), -1)
+		end
 	end)
 end
 --Спасибо FYP за енту крутую хуету:)
