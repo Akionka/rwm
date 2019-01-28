@@ -1,7 +1,7 @@
 script_name('RW Manager')
 script_author('akionka')
-script_version('1.1')
-script_version_number(2)
+script_version('1.2')
+script_version_number(3)
 script_description([[{FFFFFF}Данный скрипт разработан Akionka с использованием кода от FYP'а, а также с использованием идей коммьюнити Trinity GTA.
 В данный момент скрипт умеет:
  - В автоматическом режиме подключаться к последнему каналу
@@ -12,7 +12,9 @@ local update_log = [[{2980b9}v1.0 [20.01.2019]{FFFFFF}
 I. Скрипт автоматически подключается к каналу после релога.
 II. Также, появилось крутое меню {2980b0}/rwm{FFFFFF}
 {2980b9}v1.1 [26.01.2019]{FFFFFF}
-I. Minor fixes]]
+I. Minor fixes
+{2980b9}v1.2 [28.01.2019]{FFFFFF}
+I. Пофиксил ссылку на телеграм]]
 local sf = require 'sampfuncs'
 local sampev = require 'lib.samp.events'
 local encoding = require 'encoding'
@@ -379,7 +381,7 @@ function goupdate()
 		if status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
 			sampAddChatMessage(u8:decode('[RWM]: Новая версия установлена! Чтобы скрипт обновился нужно либо перезайти в игру, либо ...'), -1)
 			sampAddChatMessage(u8:decode('[RWM]: ... если у вас есть автоперезагрузка скриптов, то новая версия уже готова и снизу вы увидите приветственное сообщение.'), -1)
-			sampAddChatMessage(u8:decode('[RWM]: Если что-то пошло не так, то сообщите мне об этом в VK или Telegram > {2980b0}vk.com/akionka tele.run/akionka{FFFFFF}.'), -1)
+			sampAddChatMessage(u8:decode('[RWM]: Если что-то пошло не так, то сообщите мне об этом в VK или Telegram > {2980b0}vk.com/akionka teleg.run/akionka{FFFFFF}.'), -1)
 		end
 	end)
 end
