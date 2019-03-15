@@ -131,6 +131,12 @@ function imgui.OnDrawFrame()
       imgui.InputText('ID##'..selected, channel_buffs[selected]['id'], imgui.InputTextFlags.CharsDecimal)
       imgui.InputText('Название##'..selected, channel_buffs[selected]['name'])
       imgui.InputText('Пароль##'..selected, channel_buffs[selected]['pass'], imgui.InputTextFlags.CharsNoBlank)
+			if imgui.Button('Подключиться##'..selected) then
+				sampSendChat(u8:decode('/rwave join '..channels[selected]['id']..' '..channels[selected]['pass']))
+				ini.settings.connecttolast = true
+				ini.settings.last = channels[selected]['id']..' '..channels[selected]['pass']
+				inicfg.save(ini, 'rwm')
+			end
       if imgui.Button('Сохранить##'..selected) then
         local fpath = getWorkingDirectory()..'\\config\\rwm\\channels.json'
         if doesFileExist(fpath) then
